@@ -1,6 +1,7 @@
 import numpy as np
-#tính linear convolution trực tiếp
-def convolvetest(a, b):
+
+#Tính linear convolution trực tiếp
+def convolve(a, b):
     longer = [a, b][np.argmax((len(a), len(b)))]
     shorter = [b, a][np.argmin((len(b), len(a)))]
     K = len(longer)-len(shorter)+1
@@ -8,29 +9,23 @@ def convolvetest(a, b):
     for i in range(K):
         convolution[i] = np.dot(longer[i:len(shorter)+i], shorter[::-1])
     return convolution
-# def convolvetest(a, w, b = 0, stride = 1, pad = 0):
-#     """
-#     compute 1d convolutional (with bias)
-#     """
-#     w_old = a.shape[0]
-#     f = w.shape[0]
-#     a_pad = np.pad(a, pad_width=pad, mode = 'constant', constant_values = 0)
-#     w_new = int((w_old - f + 2*pad)/stride) + 1
-#     a_res = np.zeros((w_new))
-#     for i in range(w_new):
-#         start = i*stride
-#         end = start + f
-#         a_res[i] = np.sum(a_pad[start:end]*w) + b
-#     return a_res
 
+#Lấy ngẫu nhiên 2 vector
 # a = np.random.normal(0.0, 1.0, 100)
 # b = np.random.normal(0.0, 1.0, 11)
-a = np.array([1,2,3])
-b = np.array([3,4,5])
-#Hàm có sẵn convolve của python tính linear convolution
-# print(np.allclose(np.convolve(a, b, mode='same'),
-#             convolvetest(np.pad(a, ((len(b)-1)/2, (len(b)-1)/2), mode='constant', constant_values=0.0), b)))
-print(np.allclose(np.convolve(a, b, mode='same'), convolvetest(a, b)))
+
+a = np.array([1,2,3]) #Mảng a
+b = np.array([3,4,5]) #Mảng b
+
 print(a)
 print(b)
-print(convolvetest(a,b))
+
+#Kết quả khi tính trực tiếp
+print((convolve(np.pad(a, (len(b)-1, len(b)-1), mode='constant', constant_values=0.0), b)))
+
+#Kết quả khi dùng hàm có sẵn
+print(np.convolve(a, b, mode='full'))
+
+#So sánh kết quả tính trực tiếp và kết quả khi dùng hàm có sẵn của scipy/python
+print(np.allclose(np.convolve(a, b, mode='full'),
+            convolve(np.pad(a, (len(b)-1, len(b)-1), mode='constant', constant_values=0.0), b)))
