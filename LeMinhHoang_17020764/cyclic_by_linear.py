@@ -9,20 +9,26 @@ def convolve(a, b):
         convolution[i] = np.dot(longer[i:len(shorter)+i], shorter[::-1])
     return convolution
 
-def circular_convolution(a, b):
+def cyclic_convolution(a, b):
     return convolve(np.hstack((a[-len(b)+1:], a)), b)
 
-def linear_by_circular(a, b):
-    return circular_convolution(np.pad(a, (0, len(b)-1), mode='constant', constant_values=0.0), b)
+def cyclic_by_linear(a, b):
+    return cyclic_convolution(np.pad(a, (0, len(b)-1), mode='constant', constant_values=0.0), b)
 
+#Tạo 2 vector ngẫu nhiên
+# a = np.random.normal(0.0, 1.0, 100)
+# b = np.random.normal(0.0, 1.0, 11)
 a = np.array([1,2,3]) #mảng a
 b = np.array([3,4,5]) #mảng b
 
-# a = np.random.normal(0.0, 1.0, 100)
-# b = np.random.normal(0.0, 1.0, 21)
-print(np.allclose(linear_by_circular(a, b), np.convolve(a, b, mode='same')))
+print("Mảng a:", a)
+print("Mảng b:", b)
 
-print(a)
-print(b)
+print("Kết quả khi tính hàm có sẵn:", np.convolve(a, b, mode='same'))
+print("Kết quả khi tính tích chập trực tiếp:", cyclic_by_linear(a, b))
 
-print(np.convolve(a, b, mode='same'))
+# print("So sánh:", np.allclose(cyclic_by_linear(a, b), np.convolve(a, b, mode='same')))
+
+#Mảng c kiểu boolean để so sánh kết quả tính trực tiếp và kết quả khi dùng hàm có sẵn
+c = np.in1d(cyclic_by_linear(a, b), np.convolve(a, b, mode='same'))
+print(c)

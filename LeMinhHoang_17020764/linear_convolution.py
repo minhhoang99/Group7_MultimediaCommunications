@@ -17,15 +17,20 @@ def convolve(a, b):
 a = np.array([1,2,3]) #Mảng a
 b = np.array([3,4,5]) #Mảng b
 
-print(a)
-print(b)
+print("Mảng a:", a)
+print("Mảng b:",b)
 
 #Kết quả khi tính trực tiếp
-print((convolve(np.pad(a, (len(b)-1, len(b)-1), mode='constant', constant_values=0.0), b)))
+print("Kết quả khi tính trực tiếp:", (convolve(np.pad(a, (len(b)-1, len(b)-1), mode='constant', constant_values=0.0), b)))
 
 #Kết quả khi dùng hàm có sẵn
-print(np.convolve(a, b, mode='full'))
+print("Kết quả khi dùng hàm có sẵn:", np.convolve(a, b, mode='full'))
 
 #So sánh kết quả tính trực tiếp và kết quả khi dùng hàm có sẵn của scipy/python
-print(np.allclose(np.convolve(a, b, mode='full'),
+print("So sánh:", np.allclose(np.convolve(a, b, mode='full'),
             convolve(np.pad(a, (len(b)-1, len(b)-1), mode='constant', constant_values=0.0), b)))
+
+#Mảng c kiểu boolean để so sánh kết quả tính trực tiếp và kết quả khi dùng hàm có sẵn
+c = np.in1d(np.convolve(a, b, mode='full'),
+            convolve(np.pad(a, (len(b)-1, len(b)-1), mode='constant', constant_values=0.0), b))
+print(c)
